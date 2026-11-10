@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rxs.library.user.infrastructure.mapper.IUserTableMapper">
+
+    <!-- 先锁定用户行，再执行借阅额度和库存校验。 -->
+    <select id="lockById" resultType="com.rxs.library.user.domain.entity.UserTPO">
+        SELECT id,
+               username,
+               password_hash,
+               created_at
+        FROM users
+        WHERE id = #{id}
+        FOR UPDATE
+    </select>
+
+</mapper>

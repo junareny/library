@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:5.7.44
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: library_app
+      MYSQL_USER: library
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_PASSWORD mysql -h 127.0.0.1 -u library library_app -e 'SELECT 1'"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:${SERVER_PORT:-8080}:8080"
+    environment:
+      DB_URL: jdbc:mysql://db:3306/library_app?connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true&useSSL=false&allowPublicKeyRetrieval=true
+      DB_USERNAME: library
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  mysql-data:

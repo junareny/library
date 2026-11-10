@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#244d3d" />
+    <meta
+      name="description"
+      content="阅间电子图书馆，发现好书，管理你的借阅。"
+      data-i18n-content="阅间电子图书馆，发现好书，管理你的借阅。"
+    />
+    <title data-i18n="阅间 · 电子图书馆">阅间 · 电子图书馆</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/assets/app.css" />
+    <script src="/assets/i18n.js" defer></script>
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body>
+    <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <symbol id="i-book" viewBox="0 0 24 24">
+          <path d="M3 4c3-1 6 0 9 2 3-2 6-3 9-2v16c-3-1-6 0-9 2-3-2-6-3-9-2zM12 6v16" />
+        </symbol>
+        <symbol id="i-grid" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </symbol>
+        <symbol id="i-loan" viewBox="0 0 24 24">
+          <path d="M5 4h13v17H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM5 17h13M8 8h6M8 11h4M21 7v10" />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 24 24">
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 5 5" />
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" /></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" />
+        </symbol>
+        <symbol id="i-user" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></symbol>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></symbol>
+      </defs>
+    </svg>
+
+    <aside class="sidebar">
+      <a class="brand" href="#catalog" aria-label="阅间首页" data-i18n-aria-label="阅间首页"
+        ><span class="brand-mark"
+          ><svg class="icon"><use href="#i-book" /></svg></span
+        ><span
+          ><span data-i18n="阅间">阅间</span
+          ><small><span data-i18n="电子图书馆">电子图书馆</span></small></span
+        ></a
+      >
+      <p class="nav-label"><span data-i18n="我的图书馆">我的图书馆</span></p>
+      <nav aria-label="主导航" data-i18n-aria-label="主导航">
+        <a class="nav-item active" href="#catalog" data-nav="catalog"
+          ><svg class="icon"><use href="#i-grid" /></svg><span data-i18n="探索书库">探索书库</span
+          ><span class="nav-dot"></span
+        ></a>
+        <a class="nav-item" href="#loans" data-nav="loans"
+          ><svg class="icon"><use href="#i-loan" /></svg><span data-i18n="我的借阅">我的借阅</span
+          ><span class="nav-count" id="nav-loan-count">0</span></a
+        >
+      </nav>
+      <div class="sidebar-note">
+        <span class="note-index">A LITTLE EVERY DAY</span>
+        <p>
+          <span data-i18n="翻开一本书，">翻开一本书，</span><br /><span data-i18n="遇见新的可能。"
+            >遇见新的可能。</span
+          >
+        </p>
+        <div class="note-line"></div>
+        <small><span data-i18n="给好奇心，留一点时间。">给好奇心，留一点时间。</span></small>
+      </div>
+      <div class="sidebar-bottom">
+        <span class="status-dot"></span
+        ><span data-i18n="每一页，都是新开始">每一页，都是新开始</span
+        ><span class="edition"><span data-i18n="阅间 / V1.0">阅间 / V1.0</span></span>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="breadcrumb">
+          <span data-i18n="我的图书馆">我的图书馆</span><span>/</span
+          ><strong id="breadcrumb-current"><span data-i18n="探索书库">探索书库</span></strong>
+        </div>
+        <div class="topbar-actions">
+          <label class="language-control"
+            ><span data-i18n="语言"><span data-i18n="语言">语言</span></span
+            ><select id="language-select" aria-label="语言 / Language">
+              <option value="zh-CN">简体中文</option>
+              <option value="en">English</option>
+            </select></label
+          >
+          <div id="account-area">
+            <button class="button button-light button-small" data-action="login">
+              <svg class="icon"><use href="#i-user" /></svg
+              ><span data-i18n="登录 / 注册">登录 / 注册</span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <main id="main-content">
+        <section class="hero" id="catalog-hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <div class="eyebrow"><span></span>YOUR NEXT CHAPTER STARTS HERE</div>
+            <h1 id="hero-title">
+              <span data-i18n="让阅读，">让阅读，</span><br /><span data-i18n="成为日常的一部分"
+                >成为日常的一部分</span
+              ><span data-i18n="。">。</span>
+            </h1>
+            <p>
+              <span data-i18n="从一份好奇开始，寻找下一本值得翻开的书。"
+                >从一份好奇开始，寻找下一本值得翻开的书。</span
+              ><br class="desktop-break" /><span data-i18n="你的下一段旅程，就在书页之间。"
+                >你的下一段旅程，就在书页之间。</span
+              >
+            </p>
+            <a class="hero-link" href="#shelf"
+              ><span data-i18n="发现你的下一本书">发现你的下一本书</span
+              ><svg class="icon"><use href="#i-arrow" /></svg
+            ></a>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-orbit"></div>
+            <div class="art-spark spark-one">+</div>
+            <div class="art-spark spark-two">✦</div>
+            <div class="art-caption">STORIES. IDEAS. POSSIBILITIES.</div>
+            <div class="art-book book-back">
+              <span>THE ART<br />OF LEARNING</span><i>01</i>
+            </div>
+            <div class="art-book book-front">
+              <small>A WORLD WITHIN</small><span>Between<br />the pages.</span>
+              <div class="book-arch"></div>
+              <i>READ · EXPLORE · GROW</i>
+            </div>
+            <div class="art-book book-bottom"><span>ONE MORE CHAPTER</span></div>
+            <div class="art-shadow"></div>
+            <span class="art-footnote"
+              ><span data-i18n="为每一种好奇，找到答案">为每一种好奇，找到答案</span></span
+            >
+          </div>
+        </section>
+
+        <section class="stats" aria-label="图书馆概览" data-i18n-aria-label="图书馆概览">
+          <div class="stat">
+            <span class="stat-icon"
+              ><svg class="icon"><use href="#i-book" /></svg
+            ></span>
+            <div>
+              <span class="stat-label"><span data-i18n="馆藏书目">馆藏书目</span></span
+              ><strong id="stat-books"
+                >—<small><span data-i18n="本">本</span></small></strong
+              >
+            </div>
+            <span class="stat-note"
+              ><span data-i18n="探索不同的知识世界">探索不同的知识世界</span></span
+            >
+          </div>
+          <div class="stat">
+            <span class="stat-icon"
+              ><svg class="icon"><use href="#i-loan" /></svg
+            ></span>
+            <div>
+              <span class="stat-label"><span data-i18n="我的借阅">我的借阅</span></span
+              ><strong id="stat-loans"
+                >—<small><span data-i18n="/ 5 本">/ 5 本</span></small></strong
+              >
+            </div>
+            <span class="stat-note" id="stat-loans-note"
+              ><span data-i18n="登录后开启阅读之旅">登录后开启阅读之旅</span></span
+            >
+          </div>
+          <div class="stat">
+            <span class="stat-icon"
+              ><svg class="icon"><use href="#i-clock" /></svg
+            ></span>
+            <div>
+              <span class="stat-label"><span data-i18n="每次借阅">每次借阅</span></span
+              ><strong
+                >30<small><span data-i18n="天">天</span></small></strong
+              >
+            </div>
+            <span class="stat-note"
+              ><span data-i18n="从容阅读，按时归还">从容阅读，按时归还</span></span
+            >
+          </div>
+        </section>
+
+        <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+        <section id="shelf" class="shelf" aria-labelledby="shelf-title">
+          <div class="section-heading">
+            <div>
+              <div class="section-eyebrow" id="section-eyebrow">THE COLLECTION</div>
+              <h2 id="shelf-title">
+                <span id="shelf-label" data-i18n="发现好书">发现好书</span
+                ><span id="result-count"></span>
+              </h2>
+            </div>
+            <form class="search" id="search-form" role="search">
+              <svg class="icon"><use href="#i-search" /></svg
+              ><input
+                id="search-input"
+                type="search"
+                placeholder="搜索书名，发现新知…"
+                data-i18n-placeholder="搜索书名，发现新知…"
+                aria-label="搜索书名"
+                data-i18n-aria-label="搜索书名"
+                maxlength="255"
+              /><button type="submit"><span data-i18n="搜索">搜索</span></button>
+            </form>
+          </div>
+          <div class="shelf-toolbar">
+            <div
+              class="filters"
+              id="catalog-filters"
+              role="group"
+              aria-label="筛选书籍"
+              data-i18n-aria-label="筛选书籍"
+            >
+              <button class="filter active" data-filter="all" aria-pressed="true">
+                <span data-i18n="全部书籍">全部书籍</span></button
+              ><button class="filter" data-filter="available" aria-pressed="false">
+                <span data-i18n="有书可借">有书可借</span></button
+              ><button class="filter" data-filter="borrowed" aria-pressed="false">
+                <span data-i18n="我已借阅">我已借阅</span>
+              </button>
+            </div>
+            <p class="sort-label" id="sort-label">
+              <span data-i18n="按馆藏顺序排列">按馆藏顺序排列</span>
+            </p>
+          </div>
+          <div id="book-grid" class="book-grid" aria-live="polite" aria-busy="true"></div>
+          <div id="pagination" class="pagination"></div>
+        </section>
+        <footer class="footer">
+          <span class="footer-brand"
+            ><span data-i18n="阅间">阅间</span
+            ><span><span data-i18n="让好书与你相遇">让好书与你相遇</span></span></span
+          ><span
+            ><span data-i18n="慢慢读，让每一次翻页都有收获。"
+              >慢慢读，让每一次翻页都有收获。</span
+            ></span
+          >
+        </footer>
+      </main>
+    </div>
+
+    <dialog id="auth-dialog" class="modal auth-modal" aria-labelledby="auth-title">
+      <button
+        class="close-button"
+        data-close="auth-dialog"
+        aria-label="关闭登录窗口"
+        data-i18n-aria-label="关闭登录窗口"
+      >
+        <svg class="icon"><use href="#i-close" /></svg>
+      </button>
+      <div class="modal-logo">
+        <svg class="icon"><use href="#i-book" /></svg>
+      </div>
+      <p class="section-eyebrow">WELCOME TO YOUR LIBRARY</p>
+      <h2 id="auth-title"><span data-i18n="欢迎回到阅间">欢迎回到阅间</span></h2>
+      <p class="modal-description" id="auth-description">
+        <span data-i18n="登录，继续你的阅读旅程。">登录，继续你的阅读旅程。</span>
+      </p>
+      <form id="auth-form" novalidate>
+        <label for="username"><span data-i18n="用户名">用户名</span></label
+        ><input
+          id="username"
+          name="username"
+          required
+          minlength="3"
+          maxlength="50"
+          autocomplete="username"
+          placeholder="3–50 个字符，不含空格"
+          data-i18n-placeholder="3–50 个字符，不含空格"
+        /><label for="password"><span data-i18n="密码">密码</span></label>
+        <div class="password-field">
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            minlength="8"
+            maxlength="72"
+            autocomplete="current-password"
+            placeholder="至少 8 个字符"
+            data-i18n-placeholder="至少 8 个字符"
+          /><button
+            type="button"
+            id="toggle-password"
+            aria-label="显示密码"
+            data-i18n-aria-label="显示密码"
+          >
+            <span data-i18n="显示">显示</span>
+          </button>
+        </div>
+        <p class="field-help">
+          <span data-i18n="密码至少 8 个字符，最多 72 个 UTF-8 字节。"
+            >密码至少 8 个字符，最多 72 个 UTF-8 字节。</span
+          >
+        </p>
+        <p id="auth-error" class="form-error" role="alert" hidden></p>
+        <button class="button button-primary auth-submit" type="submit" id="auth-submit">
+          <span data-i18n="登录">登录</span>
+        </button>
+      </form>
+      <p class="auth-switch" id="auth-switch-copy">
+        <span data-i18n="还没有账号？">还没有账号？</span
+        ><button type="button" id="auth-switch"><span data-i18n="立即注册">立即注册</span></button>
+      </p>
+    </dialog>
+    <dialog id="detail-dialog" class="modal detail-modal" aria-labelledby="detail-title">
+      <button
+        class="close-button"
+        data-close="detail-dialog"
+        aria-label="关闭书籍详情"
+        data-i18n-aria-label="关闭书籍详情"
+      >
+        <svg class="icon"><use href="#i-close" /></svg>
+      </button>
+      <div id="detail-content"></div>
+    </dialog>
+    <dialog id="return-dialog" class="modal confirm-modal" aria-labelledby="return-title">
+      <div class="modal-logo">
+        <svg class="icon"><use href="#i-loan" /></svg>
+      </div>
+      <h2 id="return-title"><span data-i18n="这段阅读，告一段落">这段阅读，告一段落</span></h2>
+      <p id="return-description"></p>
+      <div class="confirm-actions">
+        <button class="button button-light" data-close="return-dialog">
+          <span data-i18n="再读一会儿">再读一会儿</span></button
+        ><button class="button button-primary" id="confirm-return">
+          <span data-i18n="确认归还">确认归还</span>
+        </button>
+      </div>
+      <p id="return-error" class="form-error" role="alert" hidden></p>
+    </dialog>
+    <noscript
+      ><p class="noscript-message">
+        <span data-i18n="请启用 JavaScript，以浏览图书和管理借阅。"
+          >请启用 JavaScript，以浏览图书和管理借阅。</span
+        >
+      </p></noscript
+    >
+  </body>
+</html>

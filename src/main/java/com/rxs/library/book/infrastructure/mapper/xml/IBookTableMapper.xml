@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rxs.library.book.infrastructure.mapper.IBookTableMapper">
+
+    <!-- 库存大于零时才扣减，调用方必须检查影响行数。 -->
+    <update id="decrement">
+        UPDATE books
+        SET available_copies = available_copies - 1
+        WHERE id = #{id}
+          AND available_copies &gt; 0
+    </update>
+
+    <!-- 归还时恢复库存，库存不得超过馆藏总量。 -->
+    <update id="increment">
+        UPDATE books
+        SET available_copies = available_copies + 1
+        WHERE id = #{id}
+          AND available_copies &lt; total_copies
+    </update>
+
+</mapper>
