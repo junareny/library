@@ -4,7 +4,7 @@
 
 ## 技术栈
 
-Java 21、Maven 3.9+、Spring Boot 3.3.13、Spring Security JWT、MyBatis-Plus 3.5.9、MySQL 5.7、Flyway、Springdoc、JUnit 5。
+Java 21、Maven 3.9+、Spring Boot 3.3.13、Spring Security JWT、MyBatis-Plus 3.5.9、Bucket4j 8.22.0、MySQL 5.7、Flyway、Springdoc、JUnit 5。
 
 ## 核心设计
 
@@ -73,6 +73,22 @@ docker compose down
 ```
 
 数据库使用命名卷持久化且不发布宿主机端口；应用仅绑定回环地址。远程访问需另外配置反向代理及 HTTPS。Compose 部署尚未在本项目环境中完成实测。
+
+## 接口限流
+
+使用 Bucket4j 内存令牌桶，默认开启，规则在 `application.yml` 的 `app.rate-limit` 下配置：
+
+| 接口 | 计数身份 | 桶容量 | 连续补满周期 |
+| --- | --- | --- | --- |
+| 登录 | 请求 IP | 20 | 1 分钟 |
+| 注册 | 请求 IP | 5 | 1 分钟 |
+| 借阅、归还（共享额度） | 已认证用户 | 10 | 1 分钟 |
+
+允许桶容量内的初始突发，令牌持续补充，非固定窗口计数。超限返回 HTTP `429`、`TOO_MANY_REQUESTS`、中英文提示及整秒 `Retry-After`，被拒绝的请求不执行借还事务。设置 `app.rate-limit.enabled=false` 可关闭。
+
+最多保留 `max-buckets` 个身份桶（默认 10000），空闲满一个周期后可回收；达到上限时拒绝新身份，不淘汰活跃桶。额度仅在当前实例内有效，应用重启后重置，多实例部署需改用共享存储。
+
+IP 使用直连地址，不读取客户端传入的转发头。部署反向代理后，来自同一代理的请求可能共享额度，需按实际拓扑配置可信代理和客户端地址解析。
 
 ## 测试与规范
 

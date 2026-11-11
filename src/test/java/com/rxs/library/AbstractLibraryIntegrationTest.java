@@ -60,7 +60,9 @@ import com.rxs.library.user.domain.service.IUserTableService;
             "spring.datasource.url=${TEST_DB_URL}",
             "spring.datasource.username=${TEST_DB_USERNAME}",
             "spring.datasource.password=${TEST_DB_PASSWORD}",
-            "app.jwt-secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+            "app.jwt-secret=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            // 业务回归不共享限流额度，限流集成测试使用独立上下文启用规则。
+            "app.rate-limit.enabled=false"
         })
 @AutoConfigureMockMvc
 @Import(AbstractLibraryIntegrationTest.TimeConfig.class)

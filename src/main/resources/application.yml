@@ -19,6 +19,18 @@ app:
   jwt-secret: ${JWT_SECRET:}
   jwt-issuer: library-api
   jwt-ttl-seconds: 7200
+  rate-limit:
+    enabled: true
+    max-buckets: 10000
+    login:
+      capacity: 20
+      period: 1m
+    register:
+      capacity: 5
+      period: 1m
+    loan:
+      capacity: 10
+      period: 1m
 
 mybatis-plus:
   mapper-locations: classpath*:/com/rxs/library/**/infrastructure/mapper/xml/*.xml

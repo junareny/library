@@ -35,6 +35,9 @@ public enum LibraryErrorCode implements MessageCode {
     USER_NO_LONGER_EXISTS("UNAUTHORIZED", "library.auth.user.not.exists", HttpStatus.UNAUTHORIZED),
     /** 当前用户没有操作权限。 */
     FORBIDDEN("FORBIDDEN", "library.access.forbidden", HttpStatus.FORBIDDEN),
+    /** 请求频率超过当前身份的允许额度。 */
+    TOO_MANY_REQUESTS(
+            "TOO_MANY_REQUESTS", "library.request.too.many", HttpStatus.TOO_MANY_REQUESTS),
     /** 接口不支持请求使用的方法。 */
     METHOD_NOT_ALLOWED(
             "METHOD_NOT_ALLOWED",
